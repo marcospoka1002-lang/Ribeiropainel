@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#07182d">
+<meta name="description" content="Ribeiro Painel de Clientes - acesso mensal com login, senha e vencimento automático.">
+<title>Ribeiro Painel de Clientes</title>
+<style>
+:root{
+  --bg:#06111f;--bg2:#0b2038;--card:#0d253e;--card2:#102c48;
+  --blue:#2e78ff;--cyan:#37d2ff;--green:#22c879;--gold:#f3c560;
+  --red:#ff5a61;--yellow:#ffbd3b;--text:#f4f8fc;--muted:#9fb5c8;
+  --line:rgba(255,255,255,.10);--white:#fff;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:radial-gradient(circle at 10% 5%,rgba(46,120,255,.18),transparent 28%),linear-gradient(160deg,var(--bg),#0a2540 58%,#071522);color:var(--text);min-height:100vh}
+button,input,select{font:inherit}
+a{text-decoration:none}
+.container{max-width:1180px;margin:auto;padding:0 20px}
+.topbar{background:linear-gradient(90deg,var(--cyan),var(--blue));color:#061522;text-align:center;padding:8px;font-weight:1000;font-size:.85rem}
+header{border-bottom:1px solid var(--line);background:rgba(6,17,31,.9);backdrop-filter:blur(12px);position:sticky;top:0;z-index:30}
+.nav{min-height:74px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{display:flex;align-items:center;gap:11px;font-weight:1000}
+.logo{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(135deg,var(--cyan),var(--blue));color:#061522;font-weight:1000}
+.clock{text-align:right;color:var(--muted);font-size:.82rem}.clock b{display:block;color:#fff;font-size:.95rem}
+.main{padding:28px 0 70px}
+.card{background:linear-gradient(180deg,rgba(14,43,70,.92),rgba(8,29,49,.95));border:1px solid var(--line);border-radius:24px;padding:24px;box-shadow:0 18px 48px rgba(0,0,0,.18)}
+.login{max-width:470px;margin:55px auto}
+.login h1{font-size:2rem;margin:0 0 7px}.login p{color:var(--muted);margin:0 0 20px}
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}.field label{font-size:.8rem;color:#c9d9e6;font-weight:900}.field input,.field select{background:#061a2c;border:1px solid #1a496f;border-radius:12px;color:#fff;padding:12px;outline:none}.field input:focus,.field select:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(55,210,255,.10)}
+.btn{border:0;border-radius:12px;padding:12px 16px;font-weight:1000;cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
+.btn-blue{background:linear-gradient(135deg,var(--cyan),var(--blue));color:#061522}.btn-green{background:var(--green);color:#fff}.btn-red{background:#7a282c;color:#fff}.btn-ghost{background:#102b45;color:#e8f4ff;border:1px solid var(--line)}.btn-gold{background:linear-gradient(135deg,#ffe08a,var(--gold));color:#1d1604}
+.full{width:100%}.hidden{display:none!important}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}.stat{background:linear-gradient(180deg,var(--card),#0a1f34);border:1px solid var(--line);border-radius:18px;padding:18px}.stat small{color:var(--muted);font-weight:900}.stat strong{display:block;font-size:1.9rem;margin-top:6px}.stat:nth-child(1) strong{color:#75b0ff}.stat:nth-child(2) strong{color:#67e8a4}.stat:nth-child(3) strong{color:#ffd06a}.stat:nth-child(4) strong{color:#ff8a90}
+.hero{display:grid;grid-template-columns:1fr .75fr;gap:20px;margin-bottom:20px}.welcome h1{font-size:2.3rem;margin:0 0 8px}.welcome p{color:var(--muted);margin:0}.statusbox{display:flex;align-items:center;justify-content:space-between;gap:14px}.statusbig{font-size:1.9rem;font-weight:1000}.statusbig.active{color:#65eba5}.statusbig.expired{color:#ff858b}.statusbig.blocked{color:#ff858b}.statusbig.pending{color:#ffd06a}.muted{color:var(--muted)}
+.panel{margin-top:18px}.panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:15px}.panel h2{margin:0;font-size:1.18rem}
+.notice{padding:12px 14px;border-radius:13px;border:1px solid rgba(243,197,96,.34);background:rgba(243,197,96,.08);color:#f6d98f;font-size:.86rem}
+.expired-box{text-align:center;padding:38px}.expired-box .icon{font-size:3.2rem}.expired-box h1{font-size:2.2rem;margin:10px 0 7px}.expired-box p{color:var(--muted);max-width:570px;margin:0 auto 18px}
+.tablewrap{overflow:auto}table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:11px 9px;border-bottom:1px solid var(--line);font-size:.88rem}th{font-size:.78rem;color:#c9d8e5}.badge{display:inline-block;padding:5px 8px;border-radius:999px;font-size:.72rem;font-weight:1000}.active-b{background:rgba(34,200,121,.15);color:#6eeaaa}.expired-b,.blocked-b{background:rgba(255,90,97,.15);color:#ff989d}.pending-b{background:rgba(255,189,59,.15);color:#ffd36d}
+.actions{display:flex;gap:7px;flex-wrap:wrap}.formgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:11px}.span2{grid-column:1/-1}
+.admin-layout{display:grid;grid-template-columns:1.2fr .8fr;gap:18px}.admin-card{margin-top:18px}
+.progress{height:10px;background:#061a2c;border-radius:999px;overflow:hidden;margin-top:10px}.progress div{height:100%;background:linear-gradient(90deg,var(--cyan),var(--green));border-radius:999px}
+.logout{background:none;border:1px solid var(--line);color:#fff;padding:9px 12px;border-radius:10px;cursor:pointer}
+@media(max-width:900px){.hero,.admin-layout{grid-template-columns:1fr}.grid4{grid-template-columns:1fr 1fr}.formgrid{grid-template-columns:1fr}.span2{grid-column:auto}}
+@media(max-width:560px){.grid4{grid-template-columns:1fr}.brand{font-size:.95rem}.clock{display:none}.main{padding-top:18px}}
+</style>
+</head>
+<body>
+
+<div class="topbar">🔐 RIBEIRO PAINEL DE CLIENTES • ACESSO MENSAL CONTROLADO</div>
+
+<header>
+<div class="container nav">
+  <div class="brand"><div class="logo">R</div>RIBEIRO PAINEL DE CLIENTES</div>
+  <div style="display:flex;align-items:center;gap:12px">
+    <div class="clock"><b id="date">--</b><span id="time">--</span></div>
+    <button id="logoutBtn" class="logout hidden" onclick="logout()">Sair</button>
+  </div>
+</div>
+</header>
+
+<main class="main">
+<div class="container">
+
+  <section id="loginView" class="card login">
+    <h1>Acessar minha conta</h1>
+    <p>Entre com o e-mail e a senha cadastrados.</p>
+    <div class="field"><label>E-mail</label><input id="email" type="email" placeholder="cliente@email.com"></div>
+    <div class="field"><label>Senha</label><input id="password" type="password" placeholder="Sua senha"></div>
+    <button class="btn btn-blue full" onclick="login()">Entrar</button>
+    <div id="loginMsg" class="notice hidden" style="margin-top:12px"></div>
+  </section>
+
+  <section id="clientView" class="hidden">
+    <div class="hero">
+      <div class="card welcome">
+        <small style="color:#82e9ff;font-weight:1000">ÁREA DO CLIENTE</small>
+        <h1>Olá, <span id="clientName">cliente</span> 👋</h1>
+        <p>Veja abaixo o status do seu plano e a data da próxima renovação.</p>
+      </div>
+      <div class="card statusbox">
+        <div><div class="muted">STATUS DO PLANO</div><div id="statusBig" class="statusbig">--</div></div>
+        <div style="text-align:right"><div class="muted">VENCIMENTO</div><b id="expiresAt">--</b></div>
+      </div>
+    </div>
+
+    <div id="activeContent">
+      <div class="grid4">
+        <div class="stat"><small>PLANO</small><strong id="planName">Mensal</strong></div>
+        <div class="stat"><small>DIAS RESTANTES</small><strong id="daysLeft">0</strong></div>
+        <div class="stat"><small>VALOR</small><strong id="planPrice">R$ 19,90</strong></div>
+        <div class="stat"><small>ATUALIZAÇÕES</small><strong id="updatePrice">R$ 9,90</strong></div>
+      </div>
+
+      <div class="card panel">
+        <div class="panel-head"><h2>Tempo restante do acesso</h2><span id="percentText" class="muted">--</span></div>
+        <div class="progress"><div id="progressBar" style="width:0%"></div></div>
+        <div class="notice" style="margin-top:14px">Seu acesso é verificado automaticamente. Ao vencer, a área do cliente é bloqueada até a renovação.</div>
+      </div>
+
+      <div class="card panel">
+        <div class="panel-head"><h2>Precisa renovar ou solicitar uma alteração?</h2></div>
+        <div class="actions">
+          <a id="renewWa" class="btn btn-green" target="_blank">📲 Renovar pelo WhatsApp</a>
+          <a id="updateWa" class="btn btn-blue" target="_blank">✏️ Solicitar atualização</a>
+        </div>
+      </div>
+    </div>
+
+    <div id="expiredContent" class="card expired-box hidden">
+      <div class="icon">🔒</div>
+      <h1>Acesso vencido</h1>
+      <p>O período de 30 dias do seu plano terminou. Renove para liberar novamente sua área e continuar utilizando o serviço.</p>
+      <a id="expiredWa" class="btn btn-green" target="_blank">📲 Renovar agora pelo WhatsApp</a>
+    </div>
+  </section>
+
+  <section id="adminView" class="hidden">
+    <div class="hero">
+      <div class="card welcome">
+        <small style="color:#82e9ff;font-weight:1000">PAINEL ADMINISTRATIVO</small>
+        <h1>Gestão de clientes</h1>
+        <p>Cadastre clientes, defina vencimentos, renove por 30 dias e bloqueie acessos.</p>
+      </div>
+      <div class="card statusbox"><div><div class="muted">ADMINISTRADOR</div><div class="statusbig active">ATIVO</div></div></div>
+    </div>
+
+    <div class="grid4">
+      <div class="stat"><small>CLIENTES</small><strong id="aTotal">0</strong></div>
+      <div class="stat"><small>ATIVOS</small><strong id="aActive">0</strong></div>
+      <div class="stat"><small>VENCENDO</small><strong id="aSoon">0</strong></div>
+      <div class="stat"><small>VENCIDOS</small><strong id="aExpired">0</strong></div>
+    </div>
+
+    <div class="admin-layout">
+      <div class="card admin-card">
+        <div class="panel-head"><h2>Clientes cadastrados</h2><button class="btn btn-green" onclick="clearForm()">+ Novo cliente</button></div>
+        <div class="tablewrap">
+          <table>
+            <thead><tr><th>Cliente</th><th>Plano</th><th>Vencimento</th><th>Status</th><th>Ações</th></tr></thead>
+            <tbody id="clientRows"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card admin-card">
+        <h2 style="margin-top:0" id="formTitle">Novo cliente</h2>
+        <input id="editId" type="hidden">
+        <div class="formgrid">
+          <div class="field span2"><label>Nome</label><input id="fName"></div>
+          <div class="field span2"><label>E-mail</label><input id="fEmail" type="email"></div>
+          <div class="field span2"><label>Senha inicial</label><input id="fPassword" type="text" placeholder="mínimo 6 caracteres"></div>
+          <div class="field"><label>Plano</label><input id="fPlan" value="Site Mensal"></div>
+          <div class="field"><label>Valor mensal</label><input id="fPrice" type="number" step="0.01" value="19.90"></div>
+          <div class="field"><label>Dias de acesso</label><select id="fDays"><option value="30">30 dias</option><option value="60">60 dias</option><option value="90">90 dias</option></select></div>
+          <div class="field"><label>Status</label><select id="fStatus"><option value="active">Ativo</option><option value="blocked">Bloqueado</option></select></div>
+        </div>
+        <div class="actions" style="margin-top:12px">
+          <button class="btn btn-gold" onclick="saveClient()">Salvar cliente</button>
+          <button class="btn btn-ghost" onclick="clearForm()">Limpar</button>
+        </div>
+        <div class="notice" style="margin-top:14px">Ao criar um cliente, o sistema gera o usuário no Supabase Auth e define automaticamente a data de vencimento.</div>
+      </div>
+    </div>
+  </section>
+
+</div>
+</main>
+
+<script type="module">
+let sb=null, currentUser=null, profile=null, config=null;
+const WHATSAPP='5531996631240';
+
+const $=id=>document.getElementById(id);
+function tick(){
+ const d=new Date();
+ $('date').textContent=d.toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'});
+ $('time').textContent=d.toLocaleTimeString('pt-BR');
+}
+setInterval(tick,1000); tick();
+
+function showMsg(msg){
+ $('loginMsg').textContent=msg;$('loginMsg').classList.remove('hidden')
+}
+
+async function getConfig(){
+ const r=await fetch('/.netlify/functions/config');
+ if(!r.ok) throw new Error('Configuração do sistema indisponível.');
+ return await r.json();
+}
+
+async function init(){
+ try{
+   config=await getConfig();
+   const {createClient}=await import('https://esm.sh/@supabase/supabase-js@2');
+   sb=createClient(config.supabaseUrl,config.supabaseAnonKey);
+   const {data:{session}}=await sb.auth.getSession();
+   if(session){currentUser=session.user; await loadProfile();}
+ }catch(e){showMsg(e.message)}
+}
+
+window.login=async function(){
+ $('loginMsg').classList.add('hidden');
+ if(!sb){showMsg('Aguarde o sistema carregar.');return}
+ const email=$('email').value.trim(), password=$('password').value;
+ if(!email||!password){showMsg('Preencha e-mail e senha.');return}
+ const {data,error}=await sb.auth.signInWithPassword({email,password});
+ if(error){showMsg('E-mail ou senha inválidos.');return}
+ currentUser=data.user; await loadProfile();
+}
+
+window.logout=async function(){
+ if(sb) await sb.auth.signOut();
+ location.reload();
+}
+
+async function loadProfile(){
+ const {data,error}=await sb.from('profiles').select('*').eq('id',currentUser.id).single();
+ if(error||!data){showMsg('Perfil do usuário não encontrado.');return}
+ profile=data;
+ $('loginView').classList.add('hidden');
+ $('logoutBtn').classList.remove('hidden');
+ if(profile.is_admin){$('adminView').classList.remove('hidden');await loadAdmin()}
+ else{$('clientView').classList.remove('hidden');renderClient()}
+}
+
+function clientStatus(p){
+ if(p.status==='blocked')return'blocked';
+ const exp=new Date(p.expires_at);
+ if(exp.getTime()<=Date.now())return'expired';
+ return'active'
+}
+function brl(v){return Number(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'})}
+function fmtDate(v){return new Date(v).toLocaleDateString('pt-BR')}
+function esc(s){return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+
+function renderClient(){
+ const s=clientStatus(profile), exp=new Date(profile.expires_at), now=new Date();
+ const days=Math.max(0,Math.ceil((exp-now)/86400000));
+ $('clientName').textContent=profile.full_name||'cliente';
+ $('expiresAt').textContent=fmtDate(profile.expires_at);
+ $('planName').textContent=profile.plan_name||'Mensal';
+ $('daysLeft').textContent=days;
+ $('planPrice').textContent=brl(profile.monthly_price||19.90);
+ $('updatePrice').textContent=brl(profile.update_price||9.90);
+ const st=$('statusBig');
+ st.className='statusbig '+s;
+ st.textContent=s==='active'?'ATIVO':s==='blocked'?'BLOQUEADO':'VENCIDO';
+ const pct=Math.min(100,Math.max(0,(days/30)*100));
+ $('progressBar').style.width=pct+'%';
+ $('percentText').textContent=days+' dia(s) restante(s)';
+ const base=`Olá, sou ${profile.full_name||'cliente'}. Quero renovar meu plano ${profile.plan_name||''}. Meu vencimento é ${fmtDate(profile.expires_at)}.`;
+ const renew='https://wa.me/'+WHATSAPP+'?text='+encodeURIComponent(base);
+ $('renewWa').href=renew;$('expiredWa').href=renew;
+ $('updateWa').href='https://wa.me/'+WHATSAPP+'?text='+encodeURIComponent(`Olá, sou ${profile.full_name||'cliente'}. Quero solicitar uma atualização no meu site.`);
+ if(s==='active'){
+   $('activeContent').classList.remove('hidden');$('expiredContent').classList.add('hidden')
+ }else{
+   $('activeContent').classList.add('hidden');$('expiredContent').classList.remove('hidden');
+   $('expiredContent').querySelector('h1').textContent=s==='blocked'?'Acesso bloqueado':'Acesso vencido';
+ }
+}
+
+async function token(){const {data:{session}}=await sb.auth.getSession();return session?.access_token||''}
+async function adminApi(action,body={}){
+ const r=await fetch('/.netlify/functions/admin',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+await token()},body:JSON.stringify({action,...body})});
+ const data=await r.json().catch(()=>({}));
+ if(!r.ok)throw new Error(data.error||'Erro na operação');
+ return data;
+}
+
+let adminClients=[];
+async function loadAdmin(){
+ const d=await adminApi('list');adminClients=d.clients||[];renderAdmin()
+}
+function renderAdmin(){
+ $('aTotal').textContent=adminClients.length;
+ $('aActive').textContent=adminClients.filter(x=>clientStatus(x)==='active').length;
+ $('aExpired').textContent=adminClients.filter(x=>['expired','blocked'].includes(clientStatus(x))).length;
+ $('aSoon').textContent=adminClients.filter(x=>{if(clientStatus(x)!=='active')return false;const d=Math.ceil((new Date(x.expires_at)-new Date())/86400000);return d<=5}).length;
+ $('clientRows').innerHTML=adminClients.length?adminClients.map(c=>{
+   const s=clientStatus(c);
+   return `<tr><td><b>${esc(c.full_name||'')}</b><br><span class="muted">${esc(c.email||'')}</span></td><td>${esc(c.plan_name||'')}</td><td>${fmtDate(c.expires_at)}</td><td><span class="badge ${s}-b">${s==='active'?'Ativo':s==='blocked'?'Bloqueado':'Vencido'}</span></td><td><div class="actions"><button class="btn btn-ghost" onclick="editClient('${c.id}')">Editar</button><button class="btn btn-green" onclick="renewClient('${c.id}')">+30 dias</button><button class="btn btn-red" onclick="toggleBlock('${c.id}','${s}')">${s==='blocked'?'Liberar':'Bloquear'}</button></div></td></tr>`
+ }).join(''):'<tr><td colspan="5">Nenhum cliente cadastrado.</td></tr>'
+}
+
+window.clearForm=function(){
+ $('editId').value='';$('formTitle').textContent='Novo cliente';$('fName').value='';$('fEmail').value='';$('fPassword').value='';$('fPlan').value='Site Mensal';$('fPrice').value='19.90';$('fDays').value='30';$('fStatus').value='active';$('fEmail').disabled=false;$('fPassword').disabled=false
+}
+window.editClient=function(id){
+ const c=adminClients.find(x=>x.id===id);if(!c)return;
+ $('editId').value=c.id;$('formTitle').textContent='Editar cliente';$('fName').value=c.full_name||'';$('fEmail').value=c.email||'';$('fEmail').disabled=true;$('fPassword').value='';$('fPassword').disabled=true;$('fPlan').value=c.plan_name||'Site Mensal';$('fPrice').value=c.monthly_price||19.90;$('fDays').value='30';$('fStatus').value=c.status==='blocked'?'blocked':'active'
+}
+window.saveClient=async function(){
+ try{
+   const id=$('editId').value;
+   if(id){
+     await adminApi('update',{id,full_name:$('fName').value.trim(),plan_name:$('fPlan').value.trim(),monthly_price:Number($('fPrice').value||0),status:$('fStatus').value});
+   }else{
+     if(!$('fName').value.trim()||!$('fEmail').value.trim()||$('fPassword').value.length<6){alert('Preencha nome, e-mail e uma senha com pelo menos 6 caracteres.');return}
+     await adminApi('create',{full_name:$('fName').value.trim(),email:$('fEmail').value.trim(),password:$('fPassword').value,plan_name:$('fPlan').value.trim(),monthly_price:Number($('fPrice').value||0),days:Number($('fDays').value||30),status:$('fStatus').value});
+   }
+   clearForm();await loadAdmin();alert('Cliente salvo com sucesso.');
+ }catch(e){alert(e.message)}
+}
+window.renewClient=async function(id){
+ if(!confirm('Adicionar 30 dias ao acesso deste cliente?'))return;
+ try{await adminApi('renew',{id,days:30});await loadAdmin()}catch(e){alert(e.message)}
+}
+window.toggleBlock=async function(id,s){
+ try{await adminApi('status',{id,status:s==='blocked'?'active':'blocked'});await loadAdmin()}catch(e){alert(e.message)}
+}
+
+init();
+</script>
+</body>
+</html>
