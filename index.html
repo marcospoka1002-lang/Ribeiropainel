@@ -186,9 +186,10 @@ function showMsg(msg){
 }
 
 async function getConfig(){
- const r=await fetch('/.netlify/functions/config');
- if(!r.ok) throw new Error('Configuração do sistema indisponível.');
- return await r.json();
+ return {
+   supabaseUrl: 'https://aybmdptfcfqeyfoewlku.supabase.co',
+   supabaseAnonKey: 'sb_publishable_X-CU-qswrgH9XaCk0IodIA_ZR4jLGoB'
+ };
 }
 
 async function init(){
